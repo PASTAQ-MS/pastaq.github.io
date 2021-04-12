@@ -19,6 +19,7 @@ rsync:
 	@mkdir -p $(OUT)
 	@echo "Copying content tree to output directory."
 	@rsync -a $(SRC_DIR)/* $(OUT)
+	@rsync -a $(SRC_DIR)/.nojekyll $(OUT)
 
 %.html: %.md rsync
 	$(call generate_html, $<, $@, $(TEMPLATES)/default.html)
