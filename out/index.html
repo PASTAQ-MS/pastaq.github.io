@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PASTAQ</title>
+        <link rel="stylesheet" href="/assets/style.css">
+        <link rel="icon" type="image/png" href="/assets/logo.png">
+    </head>
+    <body>
+        <div id="main-container">
+        <article><hr />
+<h2 id="pastaq-pipelines-and-systems-for-threshold-avoiding-quantification">PASTAQ: Pipelines And Systems for Threshold Avoiding Quantification</h2>
+<hr />
+<p>PASTAQ provides a set of tools for high-performance pre-processing of LC-MS/MS data. Avoiding the use of arbitrary intensity thresholds in early stages of the pipeline can aid in the detection of important biological low intensity signals common in metabolomics and proteomics experiments.</p>
+<p>The core of PASTAQ is implemented in C++ and currently comes in three flavours:</p>
+<ol type="1">
+<li>A C++ library to implement new high-performance tools.</li>
+<li>Python bindings for general data processing, a default Data Dependent Acquisition (DDA) pipeline, and access to the tools to build custom analysis pipelines.</li>
+<li>A graphical user interface (PASTAQ-GUI) for easy parametrization of the DDA pipeline (beta).</li>
+</ol>
+<p>PASTAQ is suitable to build personalized pipelines using its algorithms for isotope quantification, retention time alignment, deisotoping/feature detection, and linkage of identifications obtained with any engine that outputs or can be transformed to the mzIdentML format.</p>
+<p>The default DDA pipeline can be used for proteomics and metabolomics analyses, and outputs a variety of quantitative tables as described below , as well as quality control plots that can be used to assess the accuracy of the data and pre-processing algorithms.</p>
+<h3 id="installation">Installation</h3>
+<p>PASTAQ can be downloaded and compiled <a href="https://github.com/PASTAQ-MS/PASTAQ">from source</a> by downloading or cloning the repository and following the instructions in the <code>README.md</code>. Building from source requires CMake and a suitable C++ compiler. The standard installation will build the PASTAQ C++ library and its corresponding Python bindings.</p>
+<p>We also provide standalone <a href="https://github.com/PASTAQ-MS/PASTAQ-GUI">PASTAQ-GUI</a> installers for Windows in the <a href="https://github.com/PASTAQ-MS/PASTAQ-GUI/releases">release page</a>.</p>
+<h3 id="basic-usage">Basic Usage</h3>
+<p>The following instructions apply to the usage of PASTAQ’s built-in Python bindings.</p>
+<h3 id="further-developments">Further Developments</h3>
+<p>We continue to develop PASTAQ, and are always open for collaborations to add new algorithms and improve the quality of the existing tools. If you want to get involved, feel free to <a href="mailto:a.sanchez.brotons@rug.nl">get in touch</a> with us to discuss prospective projects.</p>
+<h3 id="dda-pipeline-parameters">DDA Pipeline Parameters</h3>
+<p>The following is an explanation of the parameters that can be configured for the DDA pipeline. In general, the default parameters can be used directly with the exception of the instrument related configuration. The following prepares the parameters for data acquired with an Orbitrap instrument with 90000 resolution at reference m/z of 200 and expected peak width in retention time of 20 seconds (FWHM).</p>
+<pre><code>import pastaq
+
+params = pastaq.default_parameters(&#39;orbitrap&#39;, 20)
+params[&#39;resolution_ms1&#39;] = 90000
+params[&#39;reference_mz&#39;] = 200</code></pre>
+<h4 id="input-files">Input files</h4>
+<p>The input files can be passed to the pipeline in the following way:</p>
+<pre><code>input_files = [
+    {&#39;reference&#39;: False, &#39;raw_path&#39;: &#39;1_1.mzXML&#39;, &#39;group&#39;: &#39;a&#39;, &#39;ident_path&#39;: &#39;1_1.mzid&#39;},
+    {&#39;reference&#39;: False, &#39;raw_path&#39;: &#39;1_2.mzXML&#39;, &#39;group&#39;: &#39;a&#39;, &#39;ident_path&#39;: &#39;1_2.mzid&#39;},
+    {&#39;reference&#39;: False, &#39;raw_path&#39;: &#39;1_3.mzXML&#39;, &#39;group&#39;: &#39;a&#39;, &#39;ident_path&#39;: &#39;1_3.mzid&#39;},
+    {&#39;reference&#39;: False, &#39;raw_path&#39;: &#39;2_1.mzXML&#39;, &#39;group&#39;: &#39;b&#39;, &#39;ident_path&#39;: &#39;2_1.mzid&#39;},
+    {&#39;reference&#39;: False, &#39;raw_path&#39;: &#39;2_2.mzXML&#39;, &#39;group&#39;: &#39;a&#39;, &#39;ident_path&#39;: &#39;2_2.mzid&#39;},
+    {&#39;reference&#39;: False, &#39;raw_path&#39;: &#39;2_3.mzXML&#39;, &#39;group&#39;: &#39;a&#39;, &#39;ident_path&#39;: &#39;2_3.mzid&#39;},
+]</code></pre>
+<p>If <code>reference</code> is enabled for a single file, it will be used for retention time alignment. If it is set for multiple files, a similarity search will be performed to find the most optimal reference for alignment. If the <code>reference</code> field is not present in any files or set to false in all of them, an exhaustive similarity search will be performed instead for optimal alignment.</p>
+<p><code>raw_path</code> specifies the path to the <code>.mzXML</code> or <code>.mzML</code> file, and <code>ident_path</code> the corresponding identification file in <code>.mzIdentML</code> format.</p>
+<p>The <code>group</code> is used for the selection of isotope peaks or features that are present in at least a given percentage of samples in any given group as described below.</p>
+<h4 id="instrument-configuration">Instrument configuration</h4>
+<p>These parameters are used mostly for configuring the amount of smoothing that is applied when resampling the data and the initial estimation of the region-of-interest (ROI) for the quantification of isotope peaks via peak fitting.</p>
+<h5 id="instrument_type"><code>instrument_type</code></h5>
+<p>The type of mass spectrometer used for data acquisition. Currently, PASTAQ supports Orbitrap (<code>orbitrap</code>), time-of-flight (<code>tof</code>), triple quad (<code>quad</code>) and Fourier-transform ion cyclotron resonance (<code>fticr</code>).</p>
+<h5 id="resolution_ms1-resolution_msn-reference_mz"><code>resolution_ms1</code>, <code>resolution_msn</code>, <code>reference_mz</code></h5>
+<p>The selected resolution at the MS1 (<code>resolution_ms1</code>) and MS2 (<code>resolution_msn</code>) levels with respect to the reference m/z (<code>reference_mz</code>).</p>
+<h5 id="avg_fwhm_rt"><code>avg_fwhm_rt</code></h5>
+<p>Estimated peak width in seconds of chromatographic peaks given as full-width half-maximum. A preemptive exploration of the extracted-ion chromatogram (XIC), base-peak chromatogram (BIC) or for selected isotope peaks can be used to measure a rough estimate of this parameter. Peak widths can vary widely throughout the chromatographic range, so it is not necessary to provide an accurate measurement.</p>
+<h4 id="raw-data">Raw data</h4>
+<p>When reading the raw data, the user can select an m/z or retention time range by adjusting <code>min_mz</code>, <code>max_mz</code>, <code>min_rt</code> and <code>max_rt</code> parameters. Additionally, if the data contains scans in both positive and negative polarities, the <code>polarity</code> setting must be adjusted to <code>'pos'</code> or <code>'neg'</code> respectively. Failure to do so will impact further pre-processing steps such as resampling and peak detection. Positive and negative polarities should thus be separated in different output directories.</p>
+<h4 id="resampling">Resampling</h4>
+<p>These parameters can be used for controlling how much smoothing is applied to the data when resampling and to adjust the size of the output matrix. The resampling procedure will project the raw data into a regular map in which the expected widths of peaks in both the retention time and m/z dimensions remain the same throughout their respective ranges. This ensures that the number of sampling points for all isotope peaks will be similar in the entire map.</p>
+<p>By default, <code>num_samples_mz</code> and <code>num_samples_rt</code> establish that there will be at least 5 sampling points within the FWHM of a peak in each dimension. This should be enough for the estimation of initial local-maxima, but if not enough memory is available in the system, it may be reduced at the user’s discretion.</p>
+<p>The amount of smoothing can be controlled with <code>smoothing_coefficient_mz</code> and <code>smoothing_coefficient_rt</code>, which act as a smoothing multiplier over the Gaussian kernel set at the estimated width (in sigma units) that is automatically calculated from the given instrumental settings.</p>
+<h4 id="peak-detection">Peak detection</h4>
+<p>Detection of isotopic peaks is performed automatically based on previous settings, but the user may want to configure a maximum number of peaks to keep with the <code>max_peaks</code> parameter. It is discouraged to decrease this parameter, as noise discrimination can be performed in further stages of the pipeline without relying on intensity thresholds.</p>
+<h4 id="retention-time-alignment">Retention time alignment</h4>
+<p>The retention time alignment algorithm (Warp2D) divides the retention time range in <code>warp2d_num_points</code> segments. Windows of <code>warp2d_window_size</code> number of points are used to establish the nodes at which the warping will occur. The <code>warp2d_slack</code> indicates how many points the warping nodes can be moved. When comparing the similarity of each of the windows during the warping, a maximum number of isotope peaks (<code>warp2d_peaks_per_window</code>) can be selected to speed up the computations. Note that the retention time range is expanded by <code>warp2d_rt_expand_factor</code> at the beginning and end of the retention time range to avoid edge effects during warping.</p>
+<p>As a practical example, if the retention time range goes from 0 to 1000 seconds, with <code>warp2d_num_points = 1000</code>, <code>warp2d_window_size = 100</code> and <code>warp2d_slack = 20</code>, the range will be divided in 1 second segments, with each alignment window being 100 seconds long, and we can have a maximum warping deviation of +/- 20 seconds.</p>
+<p>The default parameters will work fine for common retention time run lengths, but we are working to simplify the parametrization of Warp2D to use a selected deviation in number of sigmas, similar to other parameters in the pipeline.</p>
+<h4 id="peakfeature-matching">Peak/Feature matching</h4>
+<p>When matching peaks/features across multiple files, a tolerance in m/z and retention time in number of sigmas can be adjusted with <code>metamatch_n_sig_mz</code> and <code>metamatch_n_sig_rt</code> respectively. Additionally, there is a filtering procedure that ensures that only clusters of matched peaks that contain non-zero values in a given percentage of samples are kept. This process works on individual groups, so if <code>metamatch_fraction = 0.7</code>, with 10 samples from group <code>a</code> and 20 of group <code>b</code>, a cluster will be retained if there are at least 7 samples from group <code>a</code> or 14 samples from group <code>b</code> with non-zero values.</p>
+<h4 id="deisotopingfeature-detection">Deisotoping/Feature detection</h4>
+<p>The deisotoping/feature detection procedure does not require much parametrization, as the parameters are derived automatically in previous steps. The only setting the user may want to adjust is the <code>feature_detection_charge_states</code> by selecting which charge states may be explored.</p>
+<h4 id="annotation-linking-and-identifications">Annotation linking and identifications</h4>
+<p>As with other pre-processing algorithms, the tolerance for linking MS/MS annotations and identifications is expressed in number of sigmas, and can be adjusted with <code>link_n_sig_mz</code> and <code>link_n_sig_rt</code>. In general, for linked peptide-spectrum-matches (PSMs), we may want to keep all the identifications, not only the ones that score the highest by setting <code>ident_max_rank_only</code> to <code>False</code>. Similarly, to keep annotations that don’t meet the FDR threshold or that have been marked as decoy, adjust <code>ident_require_threshold</code> and <code>ident_ignore_decoy</code> respectively.</p>
+<h4 id="quality-control-plots">Quality control plots</h4>
+<p>A number of parameters are available to configure the appearance of quality control plots. A palette can be selected with <code>qc_plot_palette</code>, which will accept any palette included in the <code>seaborn</code> library. (<code>husl</code>, <code>crest</code>, <code>Spectral</code>, <code>Flare</code>, etc.). By default, <code>png</code> images are generated, if a different format is required, change <code>qc_plot_extension</code> correspondingly (e.g. <code>pdf</code> or <code>eps</code>). The following configuration parameters, which should be self explanatory, can be used to adjust the general style of the output images: <code>qc_plot_dpi</code> (Image DPI), <code>qc_plot_font_family</code> (Font family, e.g. <code>'serif'</code>, <code>'sans-serif'</code>), <code>qc_plot_font_size</code>, <code>qc_plot_fig_size_x</code>, <code>qc_plot_fig_size_y</code>. Plot legends are not enabled by default, to show the legend, set <code>qc_plot_fig_legend</code> to <code>True</code>. However, this may make certain plots with large number of samples difficult to read.</p>
+<p>When plots contain multiple samples, transparency (alpha) is used to blend the different colors. The alpha can be controlled for each type of plot by changing <code>qc_plot_fill_alpha</code>, <code>qc_plot_line_alpha</code>, <code>qc_plot_scatter_alpha</code> to a number between 0.0 and 1.0. Alpha can be dynamically selected by setting these parameters to <code>'dynamic'</code> instead. In that case the alpha would be calculated as <code>alpha = 1 / n_samples</code>, and will never go below <code>qc_plot_min_dynamic_alpha</code>.</p>
+<p>If <code>qc_plot_per_file</code> is used, individual images will be generated for each QC plot, instead of on the same figure. Other adjustable QC plot parameters include <code>qc_plot_line_style</code>, which will show certain plots (e.g. XIC, density) as fill plots or line plots by selecting <code>'fill'</code> or <code>'line'</code> respectively. In some cases, the amount of points in the <code>mz vs sigma_mz</code> scatterplot may be too large for visual assessment, thus, <code>qc_plot_mz_vs_sigma_mz_max_peaks</code> will select a maximum number of points to use, and <code>qc_plot_scatter_size</code> to change the point size.</p>
+<p>For the calculation of similarity plots, the peaks with the largest intensity will be considered depending on <code>similarity_num_peaks</code>.</p>
+<h4 id="quantitative-table-generation">Quantitative table generation</h4>
+<p>A number of quantitative metrics are calculated in different stages of the pipeline. All this information is stored for the generation of the output <code>csv</code> tables. To avoid generating unnecessary files, a quantitative metric must be selected for isotopes (<code>quant_isotopes</code>) and features (<code>quant_features</code>). Isotope quantification can use the peak height (<code>'height'</code>) or peak volume (<code>'volume'</code>). Likewise, features contain quantitative information about their monoisotopic peak (<code>'monoisotopic_height'</code>, <code>'monoisotopic_volume'</code>), the peak with the highest intensity (<code>'max_height'</code>, <code>'max_volume'</code>) and the sum of all peaks in the distribution (<code>'total_height'</code>, <code>'total_volume'</code>).</p>
+<p>While generating the feature quantitative tables, if identification information is provided and <code>quant_features_charge_state_filter</code> is <code>True</code>, annotations for features in which the MS1 charge state differs from the one in the identification file will be discarded.</p>
+<p>Depending on the type of annotation linkage desired, <code>quant_ident_linkage</code> can be set to <code>theoretical_mz</code> or <code>msms_event</code> to determine which annotations will take precedence in the annotation tables.</p>
+<p>When identifications are present in more than 1 sample, a consensus identification will be generated for each cluster of features as long as <code>quant_consensus</code> is enabled. This consensus will select the identifications that appear in the maximum number of files. Additionally will ignore identifications that are not present in at least <code>quant_consensus_min_ident</code> number of samples. By default, this is 2, but more stringent criteria could be used to reduce false positives.</p>
+<p>By default all annotations are saved with their corresponding associative tables in addition to the aggregated versions. This can lead to very large files, and thus <code>quant_save_all_annotations</code> can be disabled to save some time and disk space.</p>
+<p>Peptide tables are generated by aggregating clusters with the same consensus sequence but multiple charge states. For protein group quantification it is necessary to use protein inference to select which peptides to aggregate for any given protein. A minimum number of peptides present for a protein can be selected with <code>quant_proteins_min_peptides</code>. If <code>quant_proteins_remove_subset_proteins</code> is enabled, proteins whose peptides are entirely contained within another protein which have a longest number of evidence peptides are removed. In case a peptide can’t be assigned to a unique protein as ‘razor’ we can choose to use them regardless in all instances where they would if they were to be considered razor or to ignore them as long as the <code>quant_proteins_ignore_ambiguous_peptides</code> parameter is set to <code>True</code>. For protein inference, the following quantifications can be selected with the <code>quant_proteins_quant_type</code> parameter:</p>
+<ul>
+<li>‘unique’: Only unique peptides will be used for quantification.</li>
+<li>‘razor’: Unique and peptides assigned as most likely through the Occam’s razor constrain.</li>
+<li>‘all’: All peptides will be used for quantification for all protein groups. Thus shared peptides will be used more than once.</li>
+</ul>
+<p><br/></p>
+<hr />
+        </article>
+        </div>
+    </body>
+</html>
