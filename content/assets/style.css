@@ -1,0 +1,389 @@
+:root {
+    --font-01: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Roboto', 'Lucida Grande', sans-serif;
+    --font-02: 'HelveticaNeue', 'Helvetica Neue Regular', 'Helvetica Neue', Helvetica, Arial, 'Roboto', 'Lucida Grande', sans-serif;
+    --font-03: 'HelveticaNeue-Bold', 'Helvetica Neue Bold', 'Helvetica Neue', Helvetica, Arial, 'Roboto', 'Lucida Grande', sans-serif;
+    --font-04: 'Source Code Pro', 'Monaco', 'Consolas', monospace;
+    --font-size: 21px;
+
+    /* Calculating the font-size and line heights using a modular scale:
+     *
+     * font-size: font-scale ^ n_steps (rem)
+     * line-height: ceil(font-size / line-height) * (line-height / font-size)
+     *
+     * The margin/padding have to be specified in rem multiples of the
+     * line-height.
+     *
+     * line-height: 1.500000
+     * font-scale:  1.333333
+     * */
+    --font-tiny:     0.5625000rem;
+    --font-small:    0.7500000rem;
+    --font-regular:  1.0000000rem;
+    --font-large:    1.3333333rem;
+    --font-big:      1.7777777rem;
+    --font-huge:     2.3703704rem;
+    --font-enormous: 3.1604938rem;
+    --lh-regular:    1.5000000;
+    --lh-large:      1.6875000;
+    --lh-big:        1.2656250;
+    --lh-huge:       1.4238281;
+    --lh-enormous:   1.0678710;
+    --spacer-quart:  0.3750000rem;
+    --spacer-half:   0.7500000rem;
+    --spacer:        1.5000000rem;
+    --spacer-double: 3.0000000rem;
+    --spacer-triple: 4.5000000rem;
+
+    --color-00: #1E1E1E; /* black       */
+    --color-01: #FF0066; /* red         */
+    --color-02: #3AF27D; /* green       */
+    --color-03: #F9D348; /* yellow      */
+    --color-04: #0F87FF; /* blue        */
+    --color-05: #934BF2; /* purple      */
+    --color-06: #38EDDB; /* cyan        */
+    --color-07: #EDEDED; /* white       */
+    --color-08: #282828; /* bold black  */
+    --color-09: #FF0066; /* bold red    */
+    --color-10: #3AF27D; /* bold green  */
+    --color-11: #F9D348; /* bold yellow */
+    --color-12: #0F87FF; /* bold blue   */
+    --color-13: #934BF2; /* bold purple */
+    --color-14: #38EDDB; /* bold cyan   */
+    --color-15: #E0E0E0; /* bold grey   */
+    --color-fg: var(--color-00); /* forground  */
+    --color-bg: var(--color-07); /* background */
+    --color-s1: var(--color-01); /* highlight 1 */
+    --color-s2: var(--color-04); /* highlight 2 */
+    --color-s3: var(--color-04); /* highlight 3 */
+    --color-s4: var(--color-15); /* highlight 4 */
+
+    font-size: var(--font-size);
+    box-sizing: border-box;
+}
+
+::selection {
+    background-color: var(--color-s1);
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+    text-indent: 0;
+}
+
+body {
+    font-family: var(--font-01);
+    font-weight: 300;
+    font-size: var(--font-regular);
+    line-height: var(--lh-regular);
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+}
+
+p, ul, ol, dl, dd, figure,
+blockquote, details, hr,
+fieldset, pre, table {
+    margin-bottom: var(--spacer);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding-top: var(--spacer-half);
+    margin-bottom: var(--spacer-half);
+    font-family: var(--font-03);
+    font-weight: 700;
+}
+
+body code {
+    font-family: var(--font-04);
+    font-size: var(--font-small);
+    font-weight: 400;
+}
+
+h1 {
+    margin-top: var(--spacer-half);
+    padding-bottom: var(--spacer-half);
+    font-size: var(--font-enormous);
+    line-height: var(--lh-enormous);
+}
+
+h2 {
+    margin-top: var(--spacer-double);
+    padding-bottom: var(--spacer-double);
+    font-size: var(--font-huge);
+    line-height: var(--lh-huge);
+}
+
+h3 {
+    font-size: var(--font-big);
+    line-height: var(--lh-big);
+}
+
+h4 {
+    font-size: var(--font-large);
+    line-height: var(--lh-large);
+}
+
+h5 {
+    font-size: var(--font-regular);
+    line-height: var(--lh-regular);
+}
+
+h6 {
+    font-size: var(--font-regular);
+    line-height: var(--lh-regular);
+    font-style: italic;
+}
+
+h1 code {
+    font-size: var(--font-huge);
+    font-weight: 700;
+}
+
+h2 code {
+    font-size: var(--font-big);
+    font-weight: 700;
+}
+
+h3 code {
+    font-size: var(--font-large);
+    font-weight: 700;
+}
+
+h4 code {
+    font-size: var(--font-regular);
+    font-weight: 700;
+}
+
+h5 code {
+    font-size: var(--font-small);
+    font-weight: 700;
+}
+
+h6 code {
+    font-size: var(--font-small);
+    font-style: italic;
+    font-weight: 700;
+}
+
+pre {
+    padding: 1.5rem;
+    border-radius: 0.2rem;
+    max-width: 100%;
+    max-height: 30rem;
+    overflow: auto;
+    background-color: var(--color-s4);
+}
+
+a:active, a:link, a:visited {
+    text-decoration: none;
+    color: var(--color-fg);
+    padding-bottom: .15rem;
+    border-bottom: 1px solid var(--color-s2);
+}
+
+a:hover {
+    text-decoration: none;
+    color: var(--color-s3);
+    border-bottom: 1px solid var(--color-s3);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-top: var(--spacer-half);
+    margin-bottom: var(--spacer-half);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+blockquote {
+    font-family: var(--font-02);
+    font-weight: 400;
+    font-style: italic;
+    padding-left: 1rem;
+    border-left: 2px solid var(--color-s2);
+}
+
+hr {
+    height: 2px;
+    background-color: var(--color-s2);
+    padding: 0;
+    border: 0;
+    margin-top: var(--spacer);
+    margin-bottom: var(--spacer);
+}
+
+ul {
+    list-style-type: square;
+    margin-left: 1rem;
+}
+
+ol {
+    margin-left: 1rem;
+}
+
+table {
+    font-size: var(--font-small);
+    border-collapse: collapse;
+    border-bottom: 2px solid var(--color-fg);
+    margin-left:auto;
+    margin-right:auto;
+}
+
+thead {
+    border-collapse: collapse;
+    border-bottom: 2px solid var(--color-fg);
+}
+
+th,
+td {
+    padding: var(--spacer-half) .5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-fg);
+}
+
+li > ul {
+    margin-left: 2rem;
+}
+
+footer hr {
+    margin-top: var(--spacer-triple);
+    margin-bottom: var(--spacer-half);
+}
+
+footer {
+    font-family: var(--font-02);
+    font-size: var(--font-small);
+    font-weight: 400;
+    text-align: center;
+    letter-spacing: 2px;
+    padding-bottom: var(--spacer);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#main-container {
+    width: 800px;
+    margin: auto;
+}
+
+nav {
+    font-family: var(--font-02);
+    font-weight: 400;
+    text-align: left;
+    padding-top: 1.5rem;
+    margin-bottom: .5rem;
+    padding-top: var(--spacer);
+    margin-bottom: var(--spacer-half);
+}
+
+nav ul {
+    font-size: var(--font-small);
+    letter-spacing: 2px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav a::before {
+    font-weight: 700;
+    color: var(--color-s2);
+    content: "/";
+}
+
+nav a:active, nav a:link, nav a:visited {
+    border-bottom: 0;
+}
+
+.title hr {
+    margin: 0;
+}
+
+.logo-right {
+    width: 3rem;
+    float: right;
+}
+
+.meta {
+    font-family: var(--font-02);
+    font-weight: 400;
+    font-size: var(--font-small) ;
+    text-align: right;
+    margin-top: var(--spacer-half);
+    margin-bottom: var(--spacer-half);
+    padding-bottom: var(--spacer-half);
+}
+
+.post-list ul, .note-list ul {
+    list-style-type: none;
+}
+
+.post-list ul li, .note-list ul li {
+    padding-top: var(--spacer-quart);
+    padding-bottom: var(--spacer-quart);
+}
+
+.note-list ul {
+    padding: 0;
+    margin: 0;
+}
+
+.note-list {
+    columns: 2;
+    column-width: auto;
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--color-s2);
+    padding-bottom: 1.5rem;
+}
+
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-fg: var(--color-07); /* forground  */
+        --color-bg: var(--color-00); /* background */
+        --color-s1: var(--color-05); /* highlight 1 */
+        --color-s2: var(--color-15); /* highlight 2 */
+        --color-s3: var(--color-06); /* highlight 3 */
+        --color-s4: var(--color-08); /* highlight 4 */
+    }
+
+    img[src*=".svg"] {
+        -webkit-filter: hue-rotate(180deg) grayscale(1) invert(1);
+        filter: hue-rotate(180deg) grayscale(1) invert(1);
+    }
+
+    img[src*=".gif"] {
+        -webkit-filter: grayscale(1.0);
+        filter: grayscale(1.0);
+    }
+}
+
+@media (max-width: 800px) {
+    :root {
+        --font-size: 20px;
+    }
+
+    #main-container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    :root {
+        --font-size: 18px;
+    }
+
+    #main-container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}

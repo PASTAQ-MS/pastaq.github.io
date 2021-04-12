@@ -1,6 +1,12 @@
-# PASTAQ
+---
+title: PASTAQ
+---
 
-## Pipelines And Systems for Threshold Avoiding Quantification
+---
+
+## PASTAQ: Pipelines And Systems for Threshold Avoiding Quantification
+
+---
 
 PASTAQ provides a set of tools for high-performance pre-processing of LC-MS/MS
 data. Avoiding the use of arbitrary intensity thresholds in early stages of the
@@ -22,13 +28,11 @@ and linkage of identifications obtained with any engine that outputs or can be
 transformed to the mzIdentML format.
 
 The default DDA pipeline can be used for proteomics and metabolomics analyses,
-and outputs a variety of quantitative tables as described in [the official
-documentation][docs], as well as quality control plots that can be used to
-assess the accuracy of the data and pre-processing algorithms.
+and outputs a variety of quantitative tables as described below , as well as
+quality control plots that can be used to assess the accuracy of the data and
+pre-processing algorithms.
 
-[docs]: /docs
-
-## Installation
+### Installation
 
 PASTAQ can be downloaded and compiled [from source][src] by downloading or
 cloning the repository and following the instructions in the `README.md`.
@@ -39,27 +43,25 @@ bindings.
 We also provide standalone [PASTAQ-GUI][src-gui] installers for Windows in the
 [release page][src-gui-releases].
 
-[src]: /src
-[src-gui]: /src-gui
-[src-gui-releases]: /src-gui-releases
+[src]: https://github.com/PASTAQ-MS/PASTAQ
+[src-gui]: https://github.com/PASTAQ-MS/PASTAQ-GUI
+[src-gui-releases]: https://github.com/PASTAQ-MS/PASTAQ-GUI/releases
 
-## Basic Usage
+### Basic Usage
 
 The following instructions apply to the usage of PASTAQ's built-in Python
-bindings. For installation instructions, [check here][installation].
+bindings.
 
-[installation]: /installation
-
-## Further Developments
+### Further Developments
 
 We continue to develop PASTAQ, and are always open for collaborations to add new
 algorithms and improve the quality of the existing tools. If you want to get
 involved, feel free to [get in touch][contact] with us to discuss prospective
 projects.
 
-[contact]: /contact
+[contact]: mailto:a.sanchez.brotons@rug.nl
 
-# DDA Pipeline Parameters
+### DDA Pipeline Parameters
 
 The following is an explanation of the parameters that can be configured for the
 DDA pipeline. In general, the default parameters can be used directly with the
@@ -76,7 +78,7 @@ params['resolution_ms1'] = 90000
 params['reference_mz'] = 200
 ```
 
-## Input files
+#### Input files
 
 The input files can be passed to the pipeline in the following way:
 
@@ -104,25 +106,25 @@ The `group` is used for the selection of isotope peaks or features that are
 present in at least a given percentage of samples in any given group as
 described below.
 
-## Instrument configuration
+#### Instrument configuration
 
 These parameters are used mostly for configuring the amount of smoothing that is
 applied when resampling the data and the initial estimation of the
 region-of-interest (ROI) for the quantification of isotope peaks via peak
 fitting.
 
-### `instrument_type`
+##### `instrument_type`
 
 The type of mass spectrometer used for data acquisition. Currently, PASTAQ
 supports Orbitrap (`orbitrap`), time-of-flight (`tof`), triple quad (`quad`) and
 Fourier-transform ion cyclotron resonance (`fticr`).
 
-### `resolution_ms1`, `resolution_msn`, `reference_mz`
+##### `resolution_ms1`, `resolution_msn`, `reference_mz`
 
 The selected resolution at the MS1 (`resolution_ms1`) and MS2 (`resolution_msn`)
 levels with respect to the reference m/z (`reference_mz`).
 
-### `avg_fwhm_rt`
+##### `avg_fwhm_rt`
 
 Estimated peak width in seconds of chromatographic peaks given as full-width
 half-maximum. A preemptive exploration of the extracted-ion chromatogram (XIC),
@@ -131,7 +133,7 @@ measure a rough estimate of this parameter. Peak widths can vary
 widely throughout the chromatographic range, so it is not necessary to provide
 an accurate measurement.
 
-## Raw data
+#### Raw data
 
 When reading the raw data, the user can select an m/z or retention time range by
 adjusting `min_mz`, `max_mz`, `min_rt` and `max_rt` parameters. Additionally, if
@@ -141,7 +143,7 @@ will impact further pre-processing steps such as resampling and peak detection.
 Positive and negative polarities should thus be separated in different output
 directories.
 
-## Resampling
+#### Resampling
 
 These parameters can be used for controlling how much smoothing is applied
 to the data when resampling and to adjust the size of the output matrix. The
@@ -160,7 +162,7 @@ The amount of smoothing can be controlled with `smoothing_coefficient_mz` and
 Gaussian kernel set at the estimated width (in sigma units) that is
 automatically calculated from the given instrumental settings.
 
-## Peak detection
+#### Peak detection
 
 Detection of isotopic peaks is performed automatically based on previous
 settings, but the user may want to configure a maximum number of peaks to keep
@@ -168,7 +170,7 @@ with the `max_peaks` parameter. It is discouraged to decrease this parameter, as
 noise discrimination can be performed in further stages of the pipeline without
 relying on intensity thresholds.
 
-## Retention time alignment
+#### Retention time alignment
 
 The retention time alignment algorithm (Warp2D) divides the retention time range
 in `warp2d_num_points` segments. Windows of `warp2d_window_size` number of
@@ -190,7 +192,7 @@ The default parameters will work fine for common retention time run lengths, but
 we are working to simplify the parametrization of Warp2D to use a selected
 deviation in number of sigmas, similar to other parameters in the pipeline.
 
-## Peak/Feature matching
+#### Peak/Feature matching
 
 When matching peaks/features across multiple files, a tolerance in m/z and
 retention time in number of sigmas can be adjusted with `metamatch_n_sig_mz` and
@@ -201,7 +203,7 @@ so if `metamatch_fraction = 0.7`, with 10 samples from group `a` and 20 of group
 `b`, a cluster will be retained if there are at least 7 samples from group `a`
 or 14 samples from group `b` with non-zero values.
 
-## Deisotoping/Feature detection
+#### Deisotoping/Feature detection
 
 The deisotoping/feature detection procedure does not require much
 parametrization, as the parameters are derived automatically in previous steps.
@@ -209,7 +211,7 @@ The only setting the user may want to adjust is the
 `feature_detection_charge_states` by selecting which charge states may be
 explored.
 
-## Annotation linking and identifications
+#### Annotation linking and identifications
 
 As with other pre-processing algorithms, the tolerance for linking MS/MS
 annotations and identifications is expressed in number of sigmas, and can be
@@ -220,7 +222,7 @@ not only the ones that score the highest by setting `ident_max_rank_only` to
 that have been marked as decoy, adjust `ident_require_threshold` and
 `ident_ignore_decoy` respectively.
 
-## Quality control plots
+#### Quality control plots
 
 A number of parameters are available to configure the appearance of quality
 control plots. A palette can be selected with `qc_plot_palette`, which will
@@ -254,7 +256,7 @@ the point size.
 For the calculation of similarity plots, the peaks with the largest intensity
 will be considered depending on `similarity_num_peaks`.
 
-## Quantitative table generation
+#### Quantitative table generation
 
 A number of quantitative metrics are calculated in different stages of the
 pipeline. All this information is stored for the generation of the output `csv`
@@ -309,3 +311,7 @@ protein inference, the following quantifications can be selected with the
 - 'all': All peptides will be used for quantification for all
          protein groups. Thus shared peptides will be used more
          than once.
+
+<br/>
+
+---
