@@ -1,4 +1,4 @@
-OUT       := out
+OUT       := docs
 SRC_DIR   := content
 TEMPLATES := templates
 SOURCES   := $(shell find $(SRC_DIR) -name '*.md')
