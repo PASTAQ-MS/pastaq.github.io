@@ -1,5 +1,5 @@
 OUT       := docs
-SRC_DIR   := content
+SRC_DIR   := docs
 TEMPLATES := templates
 SOURCES   := $(shell find $(SRC_DIR) -name '*.md')
 TARGETS   := $(patsubst $(SRC_DIR)%, $(OUT)%, $(patsubst %.md, %.html, $(SOURCES)))
@@ -13,25 +13,13 @@ define generate_html
 	@pandoc -s $(1) -o $(2) --template=$(strip $(3))
 endef
 
-all: clean rsync $(TARGETS)
+all: $(TARGETS)
 
-rsync:
-	@mkdir -p $(OUT)
-	@echo "Copying content tree to output directory."
-	@rsync -a $(SRC_DIR)/* $(OUT)
-	@rsync -a $(SRC_DIR)/.nojekyll $(OUT)
-
-%.html: %.md rsync
+%.html: %.md
 	$(call generate_html, $<, $@, $(TEMPLATES)/default.html)
 
-server: rsync
+server:
 	@python -m http.server --directory $(OUT)
 
 deploy:
 	@echo 'TODO: deploy with git push to gihub page'
-
-clean:
-	@echo "Cleaning output directory."
-	@touch $(OUT) && rm -r $(OUT)
-
-.PHONY: clean
