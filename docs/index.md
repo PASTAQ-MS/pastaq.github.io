@@ -24,19 +24,20 @@ The core of PASTAQ is implemented in C++ and currently comes in three flavours:
 
 PASTAQ is suitable to build personalized pipelines using its algorithms for
 isotope quantification, retention time alignment, deisotoping/feature detection,
-and linkage of identifications obtained with any engine that outputs or can be
-transformed to the mzIdentML format.
+can be combined with identifications obtained with any engine that outputs the
+mzIdentML format (and engines whose output can be converted to the mzIdentML
+format).
 
 The default DDA pipeline can be used for proteomics and metabolomics analyses,
-and outputs a variety of quantitative tables as described below , as well as
-quality control plots that can be used to assess the accuracy of the data and
-pre-processing algorithms.
+and outputs a variety of quantitative tables as described below. It also
+produces quality control plots that can be used to assess the accuracy of the
+data and pre-processing algorithms.
 
 ### Installation
 
 PASTAQ can be downloaded and compiled [from source][src] by downloading or
 cloning the repository and following the instructions in the `README.md`.
-Building from source requires CMake and a suitable C++ compiler. The standard
+Building from source requires CMake and a C++ compliant compiler. The default
 installation will build the PASTAQ C++ library and its corresponding Python
 bindings.
 
@@ -65,10 +66,10 @@ projects.
 
 The following is an explanation of the parameters that can be configured for the
 DDA pipeline. In general, the default parameters can be used directly with the
-exception of the instrument related configuration. The following prepares the
-parameters for data acquired with an Orbitrap instrument with 90000 resolution
-at reference m/z of 200 and expected peak width in retention time of 20 seconds
-(FWHM).
+exception of the instrument-related configuration. The following lines of code
+set the parameters for data acquired with an Orbitrap instrument with 90000
+resolution at reference m/z of 200 and expected peak width in retention time of
+20 seconds (FWHM).
 
 ```
 import pastaq
@@ -80,7 +81,7 @@ params['reference_mz'] = 200
 
 #### Input files
 
-The input files can be passed to the pipeline in the following way:
+Input files can be passed to the pipeline in the following way:
 
 ```
 input_files = [
@@ -93,11 +94,13 @@ input_files = [
 ]
 ```
 
-If `reference` is enabled for a single file, it will be used for retention time
-alignment. If it is set for multiple files, a similarity search will be
-performed to find the most optimal reference for alignment. If the `reference`
-field is not present in any files or set to false in all of them, an exhaustive
-similarity search will be performed instead for optimal alignment.
+Retention time is performed by aligning all samples in the retention time
+dimension to the same reference sample. The `reference` field is used to set the
+reference sample(s). If a single reference is used, it will be used for
+retention time alignment. If multiple reference are used, a similarity search
+will be performed to find the most optimal reference for alignment. If no
+reference is selected, an exhaustive search will be performed to determine the
+most suitable reference.
 
 `raw_path` specifies the path to the `.mzXML` or `.mzML` file, and `ident_path`
 the corresponding identification file in `.mzIdentML` format.
@@ -135,13 +138,13 @@ an accurate measurement.
 
 #### Raw data
 
-When reading the raw data, the user can select an m/z or retention time range by
-adjusting `min_mz`, `max_mz`, `min_rt` and `max_rt` parameters. Additionally, if
-the data contains scans in both positive and negative polarities, the `polarity`
-setting must be adjusted to `'pos'` or `'neg'` respectively. Failure to do so
-will impact further pre-processing steps such as resampling and peak detection.
-Positive and negative polarities should thus be separated in different output
-directories.
+If users want to process only a subrange in the m/z and/or retention time
+dimensions, they can do so by adjusting `min_mz`, `max_mz`, `min_rt` and
+`max_rt` parameters.  Additionally, if the data contains scans in both positive
+and negative polarities, the `polarity` setting must be set to either `'pos'` or
+`'neg'`. Failure to do so will impact further pre-processing steps such as
+resampling and peak detection.  Positive and negative polarities should thus be
+separated in different output directories.
 
 #### Resampling
 
@@ -167,8 +170,8 @@ automatically calculated from the given instrumental settings.
 Detection of isotopic peaks is performed automatically based on previous
 settings, but the user may want to configure a maximum number of peaks to keep
 with the `max_peaks` parameter. It is discouraged to decrease this parameter, as
-noise discrimination can be performed in further stages of the pipeline without
-relying on intensity thresholds.
+noise discrimination can be performed later in the pipeline without relying on
+intensity thresholds.
 
 #### Retention time alignment
 
@@ -205,11 +208,11 @@ or 14 samples from group `b` with non-zero values.
 
 #### Deisotoping/Feature detection
 
-The deisotoping/feature detection procedure does not require much
-parametrization, as the parameters are derived automatically in previous steps.
-The only setting the user may want to adjust is the
-`feature_detection_charge_states` by selecting which charge states may be
-explored.
+Users generally do not need to manually adjust the parameters of the
+deisotoping/feature detection procedure since those parameters are derived
+automatically.  However, users may want to adjust the
+`feature_detection_charge_states` parameter to select the set of possible charge
+states that will be explored.
 
 #### Annotation linking and identifications
 
@@ -237,12 +240,12 @@ explanatory, can be used to adjust the general style of the output images:
 legend, set `qc_plot_fig_legend` to `True`. However, this may make certain plots with
 large number of samples difficult to read.
 
-When plots contain multiple samples, transparency (alpha) is used to blend the
-different colors. The alpha can be controlled for each type of plot by changing
+When plots contain multiple samples, opacity (alpha) can be decreased to blend the
+different colors. The alpha channel can be controlled for each type of plot by changing
 `qc_plot_fill_alpha`, `qc_plot_line_alpha`, `qc_plot_scatter_alpha` to a number
 between 0.0 and 1.0. Alpha can be dynamically selected by setting these
-parameters to `'dynamic'` instead. In that case the alpha would be calculated as
-`alpha = 1 / n_samples`, and will never go below `qc_plot_min_dynamic_alpha`.
+parameters to `'dynamic'` instead. In that case the alpha is calculated as
+`alpha = 1 / n_samples`, but will never be below `qc_plot_min_dynamic_alpha`.
 
 If `qc_plot_per_file` is used, individual images will be generated for each QC
 plot, instead of on the same figure. Other adjustable QC plot parameters include
@@ -294,7 +297,7 @@ Peptide tables are generated by aggregating clusters with the same consensus
 sequence but multiple charge states. For protein group quantification it is
 necessary to use protein inference to select which peptides to aggregate for any
 given protein. A minimum number of peptides present for a protein can be
-selected with `quant_proteins_min_peptides`. If
+specified with the `quant_proteins_min_peptides` parameter. If
 `quant_proteins_remove_subset_proteins` is enabled, proteins whose peptides are
 entirely contained within another protein which have a longest number of
 evidence peptides are removed. In case a peptide can't be assigned to a unique
