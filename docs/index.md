@@ -62,10 +62,14 @@ bindings.
 
 We continue to develop PASTAQ, and are always open for collaborations to add new
 algorithms and improve the quality of the existing tools. If you want to get
-involved, feel free to [get in touch][contact] with us to discuss prospective
-projects.
+involved, feel free to get in touch with us to discuss prospective
+projects:
 
-[contact]: mailto:a.sanchez.brotons@rug.nl
+- [Peter Horvatovich][contact-peter]
+- [Alejandro Sanchez Brotons][contact-alex]
+
+[contact-alex]: mailto:a.sanchez.brotons@rug.nl
+[contact-peter]: mailto:p.l.horvatovich@rug.nl
 
 ### DDA Pipeline Parameters
 
