@@ -40,11 +40,17 @@ straightforward way.
 
 ### Installation
 
-PASTAQ can be downloaded and compiled [from source][src] by downloading or
-cloning the repository and following the instructions in the `README.md`.
-Building from source requires CMake and a C++ compliant compiler. The default
-installation will build the PASTAQ C++ library and its corresponding Python
-bindings.
+The simplest way of getting started with PASTAQ is to install it using `pip`:
+
+```
+pip install pastaq
+```
+
+Alternatively, PASTAQ can be downloaded and compiled [from source][src] by
+downloading or cloning the repository and following the instructions in the
+`README.md`.  Building from source requires CMake and a C++ compliant compiler.
+The default installation will build the PASTAQ C++ library and its corresponding
+Python bindings.
 
 We also provide standalone [PASTAQ-GUI][src-gui] installers for Windows in the
 [release page][src-gui-releases].
@@ -56,7 +62,9 @@ We also provide standalone [PASTAQ-GUI][src-gui] installers for Windows in the
 ### Basic Usage
 
 The following instructions apply to the usage of PASTAQ's built-in Python
-bindings.
+bindings. You can also find a brief tutorial for PASTAQ-GUI [here][gui-tutorial].
+
+[gui-tutorial]: /gui-tutorial/index.html
 
 ### Further Developments
 

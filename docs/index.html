@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>PASTAQ</title>
-        <link rel="stylesheet" href="assets/style.css">
+        <link rel="stylesheet" href="/assets/style.css">
         <link rel="icon" type="image/png" href="/assets/logo.png">
     </head>
     <body>
@@ -23,10 +23,12 @@
 <p>The default DDA pipeline can be used for proteomics and metabolomics analyses, and outputs a variety of quantitative tables as described below. It also produces quality control plots that can be used to assess the accuracy of the data and pre-processing algorithms.</p>
 <p>Currently annotation of peaks and features is implemented for proteomics using mzIdentML standard, while similar annotation for metabolomics using peaks/features accurate mass and MS/MS spectra can be implemented in straightforward way.</p>
 <h3 id="installation">Installation</h3>
-<p>PASTAQ can be downloaded and compiled <a href="https://github.com/PASTAQ-MS/PASTAQ">from source</a> by downloading or cloning the repository and following the instructions in the <code>README.md</code>. Building from source requires CMake and a C++ compliant compiler. The default installation will build the PASTAQ C++ library and its corresponding Python bindings.</p>
+<p>The simplest way of getting started with PASTAQ is to install it using <code>pip</code>:</p>
+<pre><code>pip install pastaq</code></pre>
+<p>Alternatively, PASTAQ can be downloaded and compiled <a href="https://github.com/PASTAQ-MS/PASTAQ">from source</a> by downloading or cloning the repository and following the instructions in the <code>README.md</code>. Building from source requires CMake and a C++ compliant compiler. The default installation will build the PASTAQ C++ library and its corresponding Python bindings.</p>
 <p>We also provide standalone <a href="https://github.com/PASTAQ-MS/PASTAQ-GUI">PASTAQ-GUI</a> installers for Windows in the <a href="https://github.com/PASTAQ-MS/PASTAQ-GUI/releases">release page</a>.</p>
 <h3 id="basic-usage">Basic Usage</h3>
-<p>The following instructions apply to the usage of PASTAQ’s built-in Python bindings.</p>
+<p>The following instructions apply to the usage of PASTAQ’s built-in Python bindings. You can also find a brief tutorial for PASTAQ-GUI <a href="/gui-tutorial/index.html">here</a>.</p>
 <h3 id="further-developments">Further Developments</h3>
 <p>We continue to develop PASTAQ, and are always open for collaborations to add new algorithms and improve the quality of the existing tools. If you want to get involved, feel free to get in touch with us to discuss prospective projects:</p>
 <ul>
