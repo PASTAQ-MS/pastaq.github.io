@@ -79,6 +79,17 @@ projects:
 [contact-alex]: mailto:a.sanchez.brotons@rug.nl
 [contact-peter]: mailto:p.l.horvatovich@rug.nl
 
+### Statistics and post-hoc analysis
+
+PASTAQ focuses on pre-processing algorithms for quantification and assessment of
+quality of LC-MS/MS data. Furthermore, it doesn't perform any statistics, but
+readily available solutions already exists, such as [Perseus][perseus], Excel,
+or via R or Python scripts. You can find a brief tutorial of how to use PASTAQ
+quantitative tables in Perseus [here][perseus-tutorial].
+
+[perseus]: https://maxquant.net/perseus/
+[perseus-tutorial]: /perseus-tutorial/index.html
+
 ### DDA Pipeline Parameters
 
 The following is an explanation of the parameters that can be configured for the
