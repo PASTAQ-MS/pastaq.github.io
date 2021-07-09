@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Perseus analysis of PASTAQ quantitative tables</title>
+        <link rel="stylesheet" href="/assets/style.css">
+        <link rel="icon" type="image/png" href="/assets/logo.png">
+    </head>
+    <body>
+        <div id="main-container">
+        <article><hr />
+<h2 id="perseus-analysis-of-pastaq-quantitative-tables">Perseus analysis of PASTAQ quantitative tables</h2>
+<hr />
+<p>PASTAQ output csv text files, which can be easily imported in <a href="https://maxquant.net/perseus/">Perseus</a>. Here is an example of to process these quantitative tables with Perseus using a male/female serum dataset. The protein group quantitative data can be found in the <code>protein_groups.csv</code> table, and its corresponding metadata on the <code>protein_groups_metadata.csv</code>. The two files are linked with unique integer key located in the <code>protein_group_id</code> column.</p>
+<h3 id="steps-for-perseus-analysis">Steps for Perseus analysis</h3>
+<h4 id="import-data-able">Import data able</h4>
+<p>Perseus requires both data and metadata to be within the same table. To merge the quantitative and metadata tables from PASTAQ, we have a number of options described below. Import <code>merged_protein_groups.csv</code> file in Perseus using the “Generic matrix upload” command and include the quantitative columns as “main” and the protein name/description annotations as “text”.</p>
+<h5 id="excel">Excel</h5>
+<p>Keys in the <code>protein_group_id</code> column are integer sorted in increasing value and starting from 0. Open the two files separately and copy and paste the annotation columns from <code>protein_groups_metadata.csv</code> in <code>protein_groups.csv</code>. Comparing the two columns with <code>protein_group_id</code> from both files can be used to check if there is a mismatch between rows. Finally remove one of the <code>protein_group_id</code> columns.</p>
+<h5 id="r-script">R script</h5>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;protein_groups.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;protein_groups_metadata.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>merged_table <span class="ot">&lt;-</span> <span class="fu">merge</span>(metadata, data, <span class="at">by =</span> <span class="st">&quot;protein_group_id&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(merged_table, <span class="at">file =</span> <span class="st">&quot;merged_protein_groups.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<h5 id="python-script">Python script</h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;protein_groups.csv&#39;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> pd.read_csv(<span class="st">&#39;protein_groups_metadata.csv&#39;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>merged_table <span class="op">=</span> pd.merge(metadata, data, on <span class="op">=</span> <span class="st">&#39;protein_group_id&#39;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>merged_table.to_csv(<span class="st">&#39;merged_protein_groups.csv&#39;</span>)</span></code></pre></div>
+<h4 id="perform-a-t-text-and-volcano-plot">Perform a T-Text and volcano plot</h4>
+<p>Perseus can be used to perform a T-test and visualize the results as follows:</p>
+<ul>
+<li>Perform log2 transformation of the quantitative values.</li>
+<li>Create the grouping categorical variable for man and woman using <code>“annotation   rows” -&gt; “Categorical annotation rows”</code>.</li>
+<li>Perform Volcano plot analysis with t-test and gender as categorical variable with man and woman categories.</li>
+</ul>
+<p>The output screen of this workflow is shown below.</p>
+<p><a href="figures/perseus_example.png"><img src="figures/perseus_example.png" /></a></p>
+<p><br/></p>
+<hr />
+        </article>
+        </div>
+    </body>
+</html>
